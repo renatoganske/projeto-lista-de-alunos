@@ -54,3 +54,43 @@ export const FilterForm = styled.form`
     }
 
 `;
+
+export const TableContent = styled.table`
+    margin-top: 2rem;
+    background: var(--dark-400);
+    border-radius: 8px;
+    padding: 1.6rem 3.5rem;
+    width: 100%;
+    
+    thead {
+        th {
+            text-align: initial;
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.3rem;
+            color: var(--grey-400);
+        }
+    }
+
+    tbody {
+        td {
+            border-top: 1px solid rgba(161, 161, 170, 0.3);
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.6rem;
+            color: var(--white-400);
+            padding: 0.75rem 0;
+        }
+
+        button {
+            background: var(--dark-500);
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 1.0rem;
+            line-height: 1.3rem;
+            color: var(--white);
+            border: none;
+            padding: 2px 6px;
+        }
+    }
+`;
