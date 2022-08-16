@@ -57,8 +57,7 @@ export const GlobalStyle = createGlobalStyle`
         right: 0;
         left: 0;
 
-        /* White box of the modal stay always in the middle */
-        /* Box branco do modal ficar sempre no meio */
+        /* Alinhar o box branco do modal sempre no meio */
         display: flex;
         align-items: center;
         justify-content: center;

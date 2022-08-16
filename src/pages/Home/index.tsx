@@ -9,14 +9,26 @@ import {
     TableContent
 } from './styles';
 import { UserData } from '../../types';
+import { ModalInfo } from '../../components/ModalInfo';
 
 export function Home() {
     const [dataFetching, setDataFetching] = useState<UserData[]>([]);
     const [dataFetchingBackup, setDataFetchingBackup] = useState<UserData[]>([]);
     const [isFetching, setIsFetching] = useState(true);
-    const [erro, serError] = useState(null);
+    const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
+    const [isModalInfoOpen, setIsModalInfoOpen] = useState(false);
+    const [dataUser, setDataUser] = useState<UserData>();
     const [searchCountry, setSearchCountry] = useState('');
+
+    function handleOpenModalInfo(selectedUser: UserData) {
+        setDataUser(selectedUser);
+        setIsModalInfoOpen(true);
+    }
+
+    function handleCloseModalInfo(selectedUser: UserData) {
+        setIsModalInfoOpen(false);
+    }
 
     useEffect(() => {
         axios.get('https://randomuser.me/api/', {
@@ -29,7 +41,7 @@ export function Home() {
                 setDataFetchingBackup(response.data.results);
             })
             .catch(error => {
-                console.log(error);
+                setError(error);
             })
             .finally(() => {
                 setIsFetching(false);
@@ -117,7 +129,7 @@ export function Home() {
                                                     <td>{e.gender}</td>
                                                     <td>{e.nat}</td>
                                                     <td>
-                                                        <button>Visualizar</button>
+                                                        <button onClick={() => handleOpenModalInfo(e)}>Visualizar</button>
                                                     </td>
                                                 </tr>
                                             )
@@ -130,6 +142,10 @@ export function Home() {
                     )
                 }
             </Content >
+            <ModalInfo
+                isOpen={isModalInfoOpen}
+                onRequestClose={handleCloseModalInfo}
+                selectedUser={dataUser} />
         </Container >
     )
 }
