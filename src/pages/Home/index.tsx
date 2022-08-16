@@ -26,7 +26,7 @@ export function Home() {
         setIsModalInfoOpen(true);
     }
 
-    function handleCloseModalInfo(selectedUser: UserData) {
+    function handleCloseModalInfo() {
         setIsModalInfoOpen(false);
     }
 
@@ -48,27 +48,40 @@ export function Home() {
             })
     }, []);
 
-    useEffect(() => {
-        if (search.length !== 0) {
-            const filter = dataFetching.filter(f =>
-                f.name.first.toUpperCase().indexOf(search.toLocaleUpperCase()) >= 0 ||
-                f.name.last.toUpperCase().indexOf(search.toLocaleUpperCase()) >= 0
-            );
-            setDataFetching(filter);
-        } else {
-            setDataFetching(dataFetchingBackup);
-        }
-    }, [search]);
+    //     useEffect(() => {
+    //        if (search.length > 0) {
+    //            const filter = dataFetching.filter(a =>
+    //                a.name.first.toLowerCase().indexOf(search.toLowerCase()) >= 0 ||
+    //                a.name.last.toLowerCase().indexOf(search.toLowerCase()) >= 0 
+    //            )
+    //            setDataFetching(filter)
+    //        } else {
+    //         setDataFetching(dataFetchingBackup)
+    //        }
+    //    },[search])
 
-    useEffect(() => {
-        if (searchCountry !== '') {
-            const filterCountry = dataFetching.filter(f => f.location.country.toUpperCase().indexOf(searchCountry.toUpperCase()));
-            setDataFetching(filterCountry);
+    //     useEffect(() => {
+    //        if (search.length > 0) {
+    //            const filter = dataFetching.filter(a =>
+    //                a.name.first.toLowerCase().indexOf(search.toLowerCase()) >= 0 ||
+    //                a.name.last.toLowerCase().indexOf(search.toLowerCase()) >= 0 
+    //            )
+    //            setDataFetching(filter)
+    //        } else {
+    //         setDataFetching(dataFetchingBackup)
+    //        }
+    //    },[search])
 
-        } else {
-            setDataFetching(dataFetchingBackup);
-        }
-    }, [searchCountry]);
+
+    const filteredName = search.length > 0
+        ? dataFetching.filter(a => (a.name.first.toUpperCase() || a.name.last.toUpperCase()).includes(search.toUpperCase()))
+        : [];
+
+    const filteredCountry = searchCountry.length > 0
+        ? dataFetching.filter(a => a.location.country.toUpperCase().includes(searchCountry.toUpperCase()))
+        : [];
+
+    const actuallyFilter = search.length > 0 ? filteredName : filteredCountry;
 
     return (
         <Container>
@@ -122,30 +135,59 @@ export function Home() {
                                 </thead>
                                 <tbody>
                                     {
-                                        dataFetching.map((e, index) => {
-                                            return (
-                                                <tr key={index}>
-                                                    <td>{`${e.name.first} ${e.name.last}`}</td>
-                                                    <td>{e.gender}</td>
-                                                    <td>{e.nat}</td>
-                                                    <td>
-                                                        <button onClick={() => handleOpenModalInfo(e)}>Visualizar</button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
+                                        searchCountry.length > 0 || search.length > 0 ? (
+                                            actuallyFilter.map((e, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{`${e.name.first} ${e.name.last}`}</td>
+                                                        <td>{e.gender}</td>
+                                                        <td>{e.location.country}</td>
+                                                        <td>
+                                                            <button onClick={() => handleOpenModalInfo(e)}>Visualizar</button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        ) : (
+                                            dataFetching.map((e, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td>{`${e.name.first} ${e.name.last}`}</td>
+                                                        <td>{e.gender}</td>
+                                                        <td>{e.location.country}</td>
+                                                        <td>
+                                                            <button onClick={() => handleOpenModalInfo(e)}>Visualizar</button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        )
                                     }
+                                    {
+                                        /*
+                                        {dataFetching.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{ `${item.name.first} ${item.name.last}`}</td>
+                                            <td>{ item.gender}</td>
+                                            <td>{item.nat}</td>
+                                        <td><button onClick={()=> handleOpenModalInfo(item)}>visualizar</button></td>
+                                    </tr> 
+                                        ))}
+                                        */
+                                    }
+
 
                                 </tbody>
                             </TableContent>
                         </>
-                    )
-                }
-            </Content >
+                    )}
+            </Content>
             <ModalInfo
                 isOpen={isModalInfoOpen}
                 onRequestClose={handleCloseModalInfo}
-                selectedUser={dataUser} />
-        </Container >
-    )
+                selectedUser={dataUser}
+
+            />
+        </Container>
+    );
 }
